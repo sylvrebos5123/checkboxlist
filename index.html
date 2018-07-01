@@ -1,48 +1,111 @@
 <!DOCTYPE html>
-<html>
-<head>
+<html ng-app="host-app">
+    <head>
+        <title>{{app.title}}</title>
+<!-- core scripts -->
+<link rel="stylesheet" href="style.css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.1/css/bootstrap.min.css" rel="stylesheet">
+<!--<script>document.write("<base href=\"" + document.location + "\" />");</script>-->
+<script src="http://code.angularjs.org/1.2.13/angular.js"></script>
 
-    <!-- CSS -->
-    <!-- load up bootstrap and add some spacing -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+<!-- app scripts -->
+<script src="services.js"></script>
+<script src="controllers.js"></script>
+<script src="app.js"></script>
+    </head>
+    <body ng-controller="MainCtrl">
+        <ng:include src="'top_nav.html'"></ng:include>
 
-    <!-- JS -->
-    <!-- load up angular and our custom script -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.js"></script>
-    <script src="app.js"></script>
-</head>
+        <div id="main_container" class="container-fluid">
 
-<!-- apply our angular app and controller -->
-<body ng-app="App">
-    <div ng-controller="MainCtrl">
-        <pre>{{item}} - selected = {{selected}}</pre>
-        <table class="table table-bordered table-striped">
-            <colgroup>
-                <col style="width:20px"/>
-                <col/>
-            </colgroup>
-            <tbody>
-                <tr
-                    ng-repeat="record in records"
-                    ng-class="{info:selected[record.id], warning:!selected[record.id] && minSelected()}">
-                    <td>
-                        <input
-                            type="checkbox"
-                            ng-model="selected[record.id]"
-                            id="{{record.id}}"/>
-                    
-                        <label for="{{record.id}}">
-                            {{record.name}}
-                        </label>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                <div class="row-fluid">
+                        <div id="left_nav" class="span3">
+                            <!--<div class="well sidebar-nav">-->
+                                    <table class="table table-bordered table-striped">
+                                            <colgroup>
+                                                <col style="width:20px"/>
+                                                <col/>
+                                            </colgroup>
+                                            <tbody>
+                                                <tr>
+                                                    
+                                                    <td>
+                                                            <h4>Title</h4>  
+                                                            <input type="text" ng-model="search.title">
+                                                            
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                            <h4>Hostname external</h4>
+                                                            <input type="text" ng-model="search.environment.hostname_external">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h4>Environments</h4></td>
+                                                </tr>
+                                                <tr
+                                                    ng-repeat="item in items"
+                                                    ng-class="{info:filterItems[item.name], warning:!selected[item.name] && minSelected()}">
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            ng-model="filterItems[item.name]"
+                                                            id="{{item.name}}"/>
+                                                    
+                                                        <label for="{{item.name}}">
+                                                            {{item.name}}
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                                
+                                            </tbody>
+                                        </table>
+                            <!--</div>-->
+                        </div>
 
-        <pre>hosts: {{hosts}}</pre>
-    </div>
-    
-</div>
-</body>
+                    <div id="main" class="span9">
+                                
+                        <div class="scrollable">
+                                <h3>Hosts list</h3>
+                                    <table class="table table-bordered table-condensed table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    Title 
+                                                    <a ng-click="setOrder('title')" class="icon-chevron-down"></a>
+                                                    <a ng-click="setOrder('-title')" class="icon-chevron-up"></a></th>
+                                                <th>Environment
+                                                    <a ng-click="setOrder('environment.title')" class="icon-chevron-down"></a>
+                                                    <a ng-click="setOrder('-environment.title')" class="icon-chevron-up"></a></th>
+                                                <th>Hostname External
+                                                    <a ng-click="setOrder('environment.hostname_external')" class="icon-chevron-down"></a>
+                                                    <a ng-click="setOrder('-environment.hostname_external')" class="icon-chevron-up"></a></th>
+                                                <th>Hostname Internal
+                                                    <a ng-click="setOrder('environment.hostname_internal')" class="icon-chevron-down"></a>
+                                                    <a ng-click="setOrder('-environment.hostname_internal')" class="icon-chevron-up"></a></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                
+                                            <tr class="list" ng-repeat="host in hosts|orderBy:orderProp|filter:testFilter|filter:search">
+                                                    
+                                                <td ng-click="getHost(host.id)">{{host.title}}</td>
+                                                <td>{{host.environment.title}}</td>
+                                                <td>{{host.environment.hostname_external}}</td>
+                                                <td>{{host.environment.hostname_internal}}</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                        </tfoot>
+                                    </table>
+                                    <pre>hosts: {{hosts}}</pre>
+                        </div> <!--scrollable-->
+                    </div> <!--span9-->
+
+            </div> <!--row-fluid-->
+
+        </div> <!--container-fluid-->
+            
+    </body>
 </html>

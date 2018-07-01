@@ -1,6 +1,10 @@
-body{padding:20px;}
+/* Put your css in here */
+body {
+  padding-top: 50px;
+}
 .warning{font-style:italic;color:#999;}
 
 input[type="checkbox"]{
-    visibility: hidden;
+  visibility: hidden;
 }
+
