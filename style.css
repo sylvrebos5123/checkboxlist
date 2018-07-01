@@ -1,0 +1,6 @@
+body{padding:20px;}
+.warning{font-style:italic;color:#999;}
+
+input[type="checkbox"]{
+    visibility: hidden;
+}
