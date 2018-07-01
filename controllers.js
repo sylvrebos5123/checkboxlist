@@ -33,6 +33,7 @@ controllers.controller('MainCtrl', function( $scope, Host, $location, $filter)  
     {id:3,name:'Production'}
   ];
   $scope.filterItems = {};
+  
   //Initialize all filters at true
   for(var i in $scope.items){
     $scope.filterItems[$scope.items[i].name]=true;
